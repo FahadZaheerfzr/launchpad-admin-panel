@@ -175,7 +175,7 @@ export default function AdminTable({ pools }) {
                 <td className="border px-4 py-2">
                   <button onClick={() => openEditModal(pool)}>
                     <div className="flex items-center justify-center">
-                      
+
                       {pool.sale.tags2 && pool.sale.tags2.split(",").map((tag) =>
                         tag === "" ? null : (
                           <span
@@ -193,10 +193,11 @@ export default function AdminTable({ pools }) {
                   </button>
                 </td>
                 <td className="border px-4 py-2">
-                  <div className="flex flex-row">
-                    <button onClick={() => openTokenEditModal(pool)}>
-                    {pool.sale.tokenomics?.map((tokenomic, index) => (
-                      <div key={index} className="flex flex-col items-center">
+                  <div className="flex flex-row justify-center">
+                    <button className="bg-primary-green py-2 px-4 rounded-xl" onClick={() => openTokenEditModal(pool)}>
+                      <span className="text-sm font-semibold text-white">Edit</span>
+                      {/* {pool.sale.tokenomics?.map((tokenomic, index) => (
+                      <div key={index} className="flex items-center">
                         <span className="text-sm font-semibold text-white">
                           {tokenomic.name}
                         </span>
@@ -208,26 +209,26 @@ export default function AdminTable({ pools }) {
                         >    
                         </span>
                       </div>
-                    ))}
-                    
+                    ))} */}
+
                     </button>
                   </div>
                 </td>
                 <td className="border px-4 py-2">
                   {pool.removed ? (
-                    <button 
-                    onClick={() => restorePool(pool)}
-                    className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                    <button
+                      onClick={() => restorePool(pool)}
+                      className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
                     >
                       Restore
                     </button>
                   ) : (
-                  <button
-                    onClick={() => removePool(pool)}
-                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                  >
-                    Remove
-                  </button>
+                    <button
+                      onClick={() => removePool(pool)}
+                      className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                    >
+                      Remove
+                    </button>
                   )}
                 </td>
               </tr>
@@ -235,10 +236,10 @@ export default function AdminTable({ pools }) {
           </tbody>
         </table>
 
-        {selectedPool && !tokenEdit &&(
-          <Modal tagList={tagList} selectedTags={selectedTags} toggleTag={toggleTag} confirmEditTags={confirmEditTags} setSelectedPool={setSelectedPool}/>
+        {selectedPool && !tokenEdit && (
+          <Modal tagList={tagList} selectedTags={selectedTags} toggleTag={toggleTag} confirmEditTags={confirmEditTags} setSelectedPool={setSelectedPool} />
         )}
-        {selectedPool && tokenEdit &&(
+        {selectedPool && tokenEdit && (
           <TokenModal selectedPool={selectedPool} setSelectedPool={setSelectedPool} openLoadingModal={openLoadingModal} closeLoadingModal={closeLoadingModal} />
         )}
       </div>

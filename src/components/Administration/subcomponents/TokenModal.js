@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BACKEND_URL } from "../../../config/constants/LaunchpadAddress";
 import { toast } from "react-toastify";
 
@@ -9,8 +9,14 @@ export default function TokenModal({
   openLoadingModal,
   closeLoadingModal,
 }) {
-  const [tokenomics, setTokenomics] = useState(selectedPool.sale.tokenomics);
+  const [tokenomics, setTokenomics] = useState([]);
   const [sale, setSale] = useState(selectedPool.sale);
+
+  useEffect(() => {
+    if(selectedPool.sale.tokenomics){
+      setTokenomics(selectedPool.sale.tokenomics);
+    }
+  }, [selectedPool]);
 
   const handleTokenomicsChange = (index, field, value) => {
     const updatedTokenomics = [...tokenomics];
