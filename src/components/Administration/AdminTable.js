@@ -73,6 +73,7 @@ export default function AdminTable({ pools }) {
   };
 
   const openEditModal = (pool) => {
+    setTokenEdit(false);
     setSelectedPool(pool);
   };
   const openTokenEditModal = (pool) => {
