@@ -1,4 +1,4 @@
-const BACKEND_URL = "http://3.91.222.195"
+const BACKEND_URL = "https://protocol-api.arborswap.org"
 const BASE_URL = "http://localhost:3000"
 
 
