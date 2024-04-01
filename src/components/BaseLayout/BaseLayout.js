@@ -50,7 +50,7 @@ export default function BaseLayout({
             </div>
           )}
           <div
-            className="pb-10 mt-[130px] min-h-[calc(100vh-130px)] font-gilroy bg-tree-pattern-mobile md:bg-tree-pattern bg-center bg-no-repeat bg-contain"
+            className="pb-10 mt-[130px] min-h-[calc(100vh-130px)] font-gilroy bg-tree-pattern-mobile md:bg-tree-pattern bg-center bg-no-repeat bg-contain w-full "
           >
             {children}
           </div>
