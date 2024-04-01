@@ -251,7 +251,7 @@ export default function AdminTable({ pools }) {
                 </td>
                 <td className="border px-4 py-2">
                   {/* button on if referral off if not */}
-                  {pool.sale.referral ? (
+                  {pool.sale.isReferral ? (
                     <button
                       onClick={() => changeReferral(pool)}
                       className="bg-primary-green text-white rounded-full px-4 py-2 text-sm font-semibold"
