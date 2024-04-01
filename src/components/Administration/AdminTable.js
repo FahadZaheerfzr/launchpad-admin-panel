@@ -113,7 +113,7 @@ export default function AdminTable({ pools }) {
   const changeReferral = async (pool) => {
     try {
       openLoadingModal();
-      let finalSaleObject = { ...pool.sale, referral: !pool.sale.isReferral };
+      let finalSaleObject = { ...pool.sale, isReferral: !pool.sale.isReferral };
       const res = await axios.put(`${BACKEND_URL}/api/sale/${pool._id}`, {
         sale: finalSaleObject,
       });
