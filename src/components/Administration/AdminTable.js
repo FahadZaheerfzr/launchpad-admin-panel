@@ -113,7 +113,15 @@ export default function AdminTable({ pools }) {
   const changeReferral = async (pool) => {
     try {
       openLoadingModal();
-      let finalSaleObject = { ...pool.sale, isReferral: !pool.sale.isReferral };
+      let finalSaleObject;
+
+      // if isReferral does not exist, it will be created and set to true
+      if (pool.sale.isReferral === undefined) {
+        finalSaleObject = { ...pool.sale, isReferral: true };
+      }
+      else{
+        finalSaleObject = { ...pool.sale, isReferral: !pool.sale.isReferral };
+      }
       const res = await axios.put(`${BACKEND_URL}/api/sale/${pool._id}`, {
         sale: finalSaleObject,
       });
