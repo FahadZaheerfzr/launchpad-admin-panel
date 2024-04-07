@@ -19,8 +19,8 @@ export default function AdminTable({ pools }) {
 
   const tagList = ["SAFU", "AUDIT", "KYC", "Migration"];
 
-  const filteredPools = pools.filter((pool) =>
-    pool.sale.saleAddress.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredPools = pools?.filter((pool) =>
+    pool?.sale?.saleAddress?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   function copyText(value) {
@@ -110,6 +110,30 @@ export default function AdminTable({ pools }) {
       closeLoadingModal();
     }
   };
+  const changeReferral = async (pool) => {
+    try {
+      openLoadingModal();
+      let finalSaleObject;
+
+      // if isReferral does not exist, it will be created and set to true
+      if (pool.sale.isReferral === undefined) {
+        finalSaleObject = { ...pool.sale, isReferral: true };
+      }
+      else{
+        finalSaleObject = { ...pool.sale, isReferral: !pool.sale.isReferral };
+      }
+      const res = await axios.put(`${BACKEND_URL}/api/sale/${pool._id}`, {
+        sale: finalSaleObject,
+      });
+      toast.success("Referral status changed successfully");
+      closeLoadingModal();
+      window.location.reload();
+    } catch (err) {
+      console.log(err);
+      toast.error("Something went wrong");
+      closeLoadingModal();
+    }
+  }
 
   return (
     <div className=" w-4/6 mx-auto">
@@ -124,7 +148,7 @@ export default function AdminTable({ pools }) {
       </div>
 
       <div className="flex flex-col items-center justify-center">
-        <table className="table-auto w-11/12 dark:text-white text-center">
+      <table className="table-auto w-full dark:text-white text-center overflow-x-auto text-[12px]">
           <thead>
             <tr>
               <th className="px-4 py-2">Pool Name</th>
@@ -135,6 +159,7 @@ export default function AdminTable({ pools }) {
               <th className="px-4 py-2">Pool Tags</th>
               <th className="px-4 py-2">Tokenomics </th>
               <th className="px-4 py-2">Removed </th>
+              <th className="px-4 py-2">Referral</th>
             </tr>
           </thead>
           <tbody>
@@ -229,6 +254,23 @@ export default function AdminTable({ pools }) {
                       className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
                     >
                       Remove
+                    </button>
+                  )}
+                </td>
+                <td className="border px-4 py-2">
+                  {/* button on if referral off if not */}
+                  {pool.sale.isReferral ? (
+                    <button
+                      onClick={() => changeReferral(pool)}
+                      className="bg-primary-green text-white rounded-full px-4 py-2 text-sm font-semibold"
+                    >
+                      On
+                    </button>
+                  ) : (
+                    <button 
+                    onClick={() => changeReferral(pool)}
+                    className="bg-red-500 text-white rounded-full px-4 py-2 text-sm font-semibold">
+                      Off
                     </button>
                   )}
                 </td>
