@@ -118,8 +118,7 @@ export default function AdminTable({ pools }) {
       // if isReferral does not exist, it will be created and set to true
       if (pool.sale.isReferral === undefined) {
         finalSaleObject = { ...pool.sale, isReferral: true };
-      }
-      else{
+      } else {
         finalSaleObject = { ...pool.sale, isReferral: !pool.sale.isReferral };
       }
       const res = await axios.put(`${BACKEND_URL}/api/sale/${pool._id}`, {
@@ -133,7 +132,26 @@ export default function AdminTable({ pools }) {
       toast.error("Something went wrong");
       closeLoadingModal();
     }
-  }
+  };
+
+  const changeTrending = async (pool) => {
+
+    try {
+      openLoadingModal();
+
+      const res = await axios.put(`${BACKEND_URL}/api/sale/trending/${pool._id}`, {
+        isTrending: pool.isTrending ? false : true,
+      });
+
+      toast.success("Trending status changed successfully");
+      closeLoadingModal();
+      window.location.reload();
+    } catch (err) {
+      console.log(err.message);
+      toast.error("Something went wrong");
+      closeLoadingModal();
+    }
+  };
 
   return (
     <div className=" w-4/6 mx-auto">
@@ -148,7 +166,7 @@ export default function AdminTable({ pools }) {
       </div>
 
       <div className="flex flex-col items-center justify-center">
-      <table className="table-auto w-full dark:text-white text-center overflow-x-auto text-[12px]">
+        <table className="table-auto w-full dark:text-white text-center overflow-x-auto text-[12px]">
           <thead>
             <tr>
               <th className="px-4 py-2">Pool Name</th>
@@ -160,6 +178,7 @@ export default function AdminTable({ pools }) {
               <th className="px-4 py-2">Tokenomics </th>
               <th className="px-4 py-2">Removed </th>
               <th className="px-4 py-2">Referral</th>
+              <th className="px-4 py-2">Trending</th>
             </tr>
           </thead>
           <tbody>
@@ -201,27 +220,34 @@ export default function AdminTable({ pools }) {
                 <td className="border px-4 py-2">
                   <button onClick={() => openEditModal(pool)}>
                     <div className="flex items-center justify-center">
-
-                      {pool.sale.tags2 && pool.sale.tags2.split(",").map((tag) =>
-                        tag === "" ? null : (
-                          <span
-                            key={tag}
-                            className="bg-primary-green text-white rounded-full px-4 py-2 text-sm font-semibold"
-                          >
-                            {tag}
-                          </span>
-                        )
+                      {pool.sale.tags2 &&
+                        pool.sale.tags2.split(",").map((tag) =>
+                          tag === "" ? null : (
+                            <span
+                              key={tag}
+                              className="bg-primary-green text-white rounded-full px-4 py-2 text-sm font-semibold"
+                            >
+                              {tag}
+                            </span>
+                          )
+                        )}
+                      {!pool.sale.tags2 && (
+                        <span className="bg-primary-green text-white rounded-full px-4 py-2 text-sm font-semibold">
+                          No Tags
+                        </span>
                       )}
-                      {
-                        !pool.sale.tags2 && <span className="bg-primary-green text-white rounded-full px-4 py-2 text-sm font-semibold">No Tags</span>
-                      }
                     </div>
                   </button>
                 </td>
                 <td className="border px-4 py-2">
                   <div className="flex flex-row justify-center">
-                    <button className="bg-primary-green py-2 px-4 rounded-xl" onClick={() => openTokenEditModal(pool)}>
-                      <span className="text-sm font-semibold text-white">Edit</span>
+                    <button
+                      className="bg-primary-green py-2 px-4 rounded-xl"
+                      onClick={() => openTokenEditModal(pool)}
+                    >
+                      <span className="text-sm font-semibold text-white">
+                        Edit
+                      </span>
                       {/* {pool.sale.tokenomics?.map((tokenomic, index) => (
                       <div key={index} className="flex items-center">
                         <span className="text-sm font-semibold text-white">
@@ -236,7 +262,6 @@ export default function AdminTable({ pools }) {
                         </span>
                       </div>
                     ))} */}
-
                     </button>
                   </div>
                 </td>
@@ -267,9 +292,28 @@ export default function AdminTable({ pools }) {
                       On
                     </button>
                   ) : (
-                    <button 
-                    onClick={() => changeReferral(pool)}
-                    className="bg-red-500 text-white rounded-full px-4 py-2 text-sm font-semibold">
+                    <button
+                      onClick={() => changeReferral(pool)}
+                      className="bg-red-500 text-white rounded-full px-4 py-2 text-sm font-semibold"
+                    >
+                      Off
+                    </button>
+                  )}
+                </td>
+                <td className="border px-4 py-2">
+                  {/* button on if referral off if not */}
+                  {pool.isTrending ? (
+                    <button
+                      onClick={() => changeTrending(pool)}
+                      className="bg-primary-green text-white rounded-full px-4 py-2 text-sm font-semibold"
+                    >
+                      On
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => changeTrending(pool)}
+                      className="bg-red-500 text-white rounded-full px-4 py-2 text-sm font-semibold"
+                    >
                       Off
                     </button>
                   )}
@@ -280,10 +324,21 @@ export default function AdminTable({ pools }) {
         </table>
 
         {selectedPool && !tokenEdit && (
-          <Modal tagList={tagList} selectedTags={selectedTags} toggleTag={toggleTag} confirmEditTags={confirmEditTags} setSelectedPool={setSelectedPool} />
+          <Modal
+            tagList={tagList}
+            selectedTags={selectedTags}
+            toggleTag={toggleTag}
+            confirmEditTags={confirmEditTags}
+            setSelectedPool={setSelectedPool}
+          />
         )}
         {selectedPool && tokenEdit && (
-          <TokenModal selectedPool={selectedPool} setSelectedPool={setSelectedPool} openLoadingModal={openLoadingModal} closeLoadingModal={closeLoadingModal} />
+          <TokenModal
+            selectedPool={selectedPool}
+            setSelectedPool={setSelectedPool}
+            openLoadingModal={openLoadingModal}
+            closeLoadingModal={closeLoadingModal}
+          />
         )}
       </div>
     </div>
