@@ -10,34 +10,48 @@ export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
 
-    if (user && location.pathname === "/") {
-      navigate("/dashboard");
-    }
-  }, []);
 
   const login = (e) => {
     e.preventDefault();
+    const response = fetch("https://api.arborpad.io/login", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        grant_type: "",
+        username: username,
+        password: password,
+        scope: "",
+        client_id: "",
+        client_secret: "",
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data.user.role !== "admin") {
+          alert("You are not authorized to login");
+          return;
+        }
+        const expiryTime = new Date(new Date().getTime() + 40 * 60000); //40 minutes
+        // add expiryTime to data.user
+        data.user.expiryTime = expiryTime;
+        localStorage.setItem("user", JSON.stringify(data.user));
+        navigate("/");
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
 
-    // Find the user with the matching email and password in the usersData array
-    const user = usersData.find(
-      (userData) => userData.username === username && userData.password === password
-    );
-
-    if (user) {
-      const expiryTime = new Date(new Date().getTime() + 40 * 60000);
-      const userData = {
-        ...user,
-        expiryTime: expiryTime,
-      };
-
-      localStorage.setItem("user", JSON.stringify(userData));
-      navigate("/dashboard");
-    } else {
-      alert("Invalid username or password!");
-    }
+    console.log(response);
   };
 
   return (
@@ -54,15 +68,19 @@ export default function Login() {
               <div className=" flex items-center justify-between w-[397.15px] h-[61.38px]  rounded-[10px]  px-5 bg-[#EAF0F7] text-[#4F555A] leading-[77px]">
                 <input
                   name="username"
-                  type="username"
+                  type="email"
                   value={username}
                   required
                   className=" bg-transparent tracking-[3px]  h-10 w-full focus:outline-none "
                   placeholder="Enter username"
                   onChange={(event) => setUsername(event.target.value)}
                 />
-                <img className="ml-2 cursor-pointer" src="/images/x-icon.svg" alt=""
-                 onClick={()=>setUsername("")} />
+                <img
+                  className="ml-2 cursor-pointer"
+                  src="/images/x-icon.svg"
+                  alt=""
+                  onClick={() => setUsername("")}
+                />
               </div>
               <div className=" flex items-center text-[26px]  mt-5 justify-between w-[397.15px] h-[61.38px]  rounded-[10px]  px-5 bg-[#EAF0F7] text-[#4F555A] leading-6">
                 <input
@@ -81,8 +99,6 @@ export default function Login() {
                 />
               </div>
             </div>
-
-
 
             <div className="mt-4">
               <button
