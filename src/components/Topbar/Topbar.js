@@ -8,7 +8,8 @@ export default function Topbar({
   subpage,
   page_name,
   page_description,
-
+  setTab,
+  numberOfUsers,
 }) {
 
   
@@ -62,7 +63,33 @@ export default function Topbar({
             </div>
           </div>
         )}
+
       </div>
+        {setTab && (
+          <div className="flex items-center ml-4">
+            <button
+              onClick={() => setTab('pools')}
+              className={`${
+                subpage ? 'hidden' : 'block'
+              } bg-primary-green text-white rounded-md px-4 py-1 font-medium`}
+            >
+              Pools
+            </button>
+            <button
+              onClick={() => setTab('users')}
+              className={`${
+                subpage ? 'hidden' : 'block'
+              } bg-primary-green text-white rounded-md px-4 py-1 font-medium ml-2 relative`}
+            >
+              Users
+              {numberOfUsers > 0 && (
+              <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center">
+                { numberOfUsers }
+              </span>
+              )}
+            </button>
+          </div>
+        )}
 
     </div>
   )

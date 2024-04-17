@@ -19,6 +19,8 @@ export default function BaseLayout({
   page_description,
   admin,
   setAdminMode,
+  setTab = null,
+  numberOfUsers = 0,
 }) {
   const { theme, setTheme } = useContext(ThemeContext);
   const [tempfixed, setTempFixed] = useState(true);
@@ -30,6 +32,8 @@ export default function BaseLayout({
       setTempFixed(false);
     }
   }, [theme]);
+
+
 
   return (
     <>
@@ -46,6 +50,8 @@ export default function BaseLayout({
                 page_name={page_name}
                 admin={admin}
                 setAdminMode={setAdminMode}
+                setTab={setTab}
+                numberOfUsers={numberOfUsers}
               />
             </div>
           )}
