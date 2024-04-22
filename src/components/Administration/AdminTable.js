@@ -16,7 +16,7 @@ export default function AdminTable({ pools }) {
   const [selectedTags, setSelectedTags] = useState([]);
   const [tokenEdit, setTokenEdit] = useState(false);
   const [referralModal, setReferralModal] = useState(false);
-  const [referralPercentage, setReferralPercentage] = useState(0);
+  const [tagModal, setTagModal] = useState(false);
   const { open: openLoadingModal, close: closeLoadingModal } =
     useModal("LoadingModal");
 
@@ -76,8 +76,8 @@ export default function AdminTable({ pools }) {
   };
 
   const openEditModal = (pool) => {
-    setTokenEdit(false);
     setSelectedPool(pool);
+    setTagModal(true);
   };
   const openTokenEditModal = (pool) => {
     setTokenEdit(true);
@@ -308,7 +308,7 @@ export default function AdminTable({ pools }) {
           </tbody>
         </table>
 
-        {selectedPool && !tokenEdit && (
+        {selectedPool && tagModal && (
           <Modal
             tagList={tagList}
             selectedTags={selectedTags}
