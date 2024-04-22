@@ -8,12 +8,13 @@ export default function TokenModal({
   setSelectedPool,
   openLoadingModal,
   closeLoadingModal,
+  setTokenEdit,
 }) {
   const [tokenomics, setTokenomics] = useState([]);
   const [sale, setSale] = useState(selectedPool.sale);
 
   useEffect(() => {
-    if(selectedPool.sale.tokenomics){
+    if (selectedPool.sale.tokenomics) {
       setTokenomics(selectedPool.sale.tokenomics);
     }
   }, [selectedPool]);
@@ -22,7 +23,7 @@ export default function TokenModal({
     const updatedTokenomics = [...tokenomics];
     updatedTokenomics[index][field] = value;
     setTokenomics(updatedTokenomics);
-    setSale ({...sale, tokenomics: updatedTokenomics})
+    setSale({ ...sale, tokenomics: updatedTokenomics });
   };
 
   const handleAddTokenomic = () => {
@@ -32,13 +33,13 @@ export default function TokenModal({
       color: "#000000",
     };
     setTokenomics([...tokenomics, newTokenomic]);
-    setSale ({...sale, tokenomics: [...tokenomics, newTokenomic]})
+    setSale({ ...sale, tokenomics: [...tokenomics, newTokenomic] });
   };
   const handleRemoveTokenomic = (index) => {
     const updatedTokenomics = [...tokenomics];
     updatedTokenomics.splice(index, 1);
     setTokenomics(updatedTokenomics);
-    setSale ({...sale, tokenomics: updatedTokenomics})
+    setSale({ ...sale, tokenomics: updatedTokenomics });
   };
 
   const handleConfirmEdit = async () => {
@@ -54,7 +55,6 @@ export default function TokenModal({
       toast.success("Project details updated successfully");
       closeLoadingModal();
       window.location.reload();
-
     } catch (err) {
       console.log(err);
       toast.error("Something went wrong");
@@ -121,7 +121,10 @@ export default function TokenModal({
           </button>
           <button
             className="px-4 py-2 dark:bg-white text-white bg-black dark:text-black rounded-md "
-            onClick={() => setSelectedPool(null)}
+            onClick={() => {
+              setSelectedPool(null);
+              setTokenEdit(false);
+            }}
           >
             Cancel
           </button>

@@ -315,6 +315,7 @@ export default function AdminTable({ pools }) {
             toggleTag={toggleTag}
             confirmEditTags={confirmEditTags}
             setSelectedPool={setSelectedPool}
+            setTagModal={setTagModal}
           />
         )}
         {selectedPool && tokenEdit && (
@@ -323,6 +324,7 @@ export default function AdminTable({ pools }) {
             setSelectedPool={setSelectedPool}
             openLoadingModal={openLoadingModal}
             closeLoadingModal={closeLoadingModal}
+            setTokenEdit={setTokenEdit}
           />
         )}
         {
