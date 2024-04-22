@@ -7,6 +7,7 @@ import axios from "axios";
 import { BACKEND_URL } from "../../config/constants/LaunchpadAddress";
 import Modal from "./subcomponents/Modal";
 import TokenModal from "./subcomponents/TokenModal";
+import ReferralModal from "./subcomponents/referralModal";
 
 export default function AdminTable({ pools }) {
   const { theme } = useContext(ThemeContext);
@@ -14,6 +15,8 @@ export default function AdminTable({ pools }) {
   const [selectedPool, setSelectedPool] = useState(null);
   const [selectedTags, setSelectedTags] = useState([]);
   const [tokenEdit, setTokenEdit] = useState(false);
+  const [referralModal, setReferralModal] = useState(false);
+  const [referralPercentage, setReferralPercentage] = useState(0);
   const { open: openLoadingModal, close: closeLoadingModal } =
     useModal("LoadingModal");
 
@@ -80,6 +83,10 @@ export default function AdminTable({ pools }) {
     setTokenEdit(true);
     setSelectedPool(pool);
   };
+  const openReferralModal = (pool) => {
+    setReferralModal(true);
+    setSelectedPool(pool);
+  };
   const removePool = async (pool) => {
     try {
       openLoadingModal();
@@ -110,29 +117,7 @@ export default function AdminTable({ pools }) {
       closeLoadingModal();
     }
   };
-  const changeReferral = async (pool) => {
-    try {
-      openLoadingModal();
-      let finalSaleObject;
 
-      // if isReferral does not exist, it will be created and set to true
-      if (pool.sale.isReferral === undefined) {
-        finalSaleObject = { ...pool.sale, isReferral: true };
-      } else {
-        finalSaleObject = { ...pool.sale, isReferral: !pool.sale.isReferral };
-      }
-      const res = await axios.put(`${BACKEND_URL}/api/sale/${pool._id}`, {
-        sale: finalSaleObject,
-      });
-      toast.success("Referral status changed successfully");
-      closeLoadingModal();
-      window.location.reload();
-    } catch (err) {
-      console.log(err);
-      toast.error("Something went wrong");
-      closeLoadingModal();
-    }
-  };
 
   const changeTrending = async (pool) => {
 
@@ -286,14 +271,14 @@ export default function AdminTable({ pools }) {
                   {/* button on if referral off if not */}
                   {pool.sale.isReferral ? (
                     <button
-                      onClick={() => changeReferral(pool)}
+                      onClick={() => openReferralModal(pool)}
                       className="bg-primary-green text-white rounded-full px-4 py-2 text-sm font-semibold"
                     >
-                      On
+                      {pool.sale.referralPercentage}%
                     </button>
                   ) : (
                     <button
-                      onClick={() => changeReferral(pool)}
+                      onClick={() => openReferralModal(pool)}
                       className="bg-red-500 text-white rounded-full px-4 py-2 text-sm font-semibold"
                     >
                       Off
@@ -340,6 +325,16 @@ export default function AdminTable({ pools }) {
             closeLoadingModal={closeLoadingModal}
           />
         )}
+        {
+          referralModal && selectedPool && (
+            <ReferralModal
+              selectedPool={selectedPool}
+              setReferralModal={setReferralModal}
+              closeLoadingModal={closeLoadingModal}
+              openLoadingModal={openLoadingModal}
+            />
+          )
+        }
       </div>
     </div>
   );
