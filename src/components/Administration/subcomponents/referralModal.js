@@ -40,13 +40,13 @@ export default function ReferralModal({
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
       <div className="bg-white dark:bg-dark-3 rounded-lg shadow-lg p-4">
-        <h2 className="text-xl font-semibold mb-4 dark:text-white text-dark-3">
+        <h2 className="text-xl font-semibold mb-4  text-white">
           Edit Referral
         </h2>
         <div className="mb-4">
           <label
             htmlFor="referralPercentage"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-sm font-medium text-white"
           >
             Referral Percentage:
           </label>
@@ -57,7 +57,7 @@ export default function ReferralModal({
             
             value={referralPercentage}
             onChange={(e) => setReferralPercentage(e.target.value)}
-            className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+            className="mt-1 p-2 border border-white text-white rounded-md w-full"
           />
         </div>
         <button
@@ -68,7 +68,7 @@ export default function ReferralModal({
         </button>
         <button
           onClick={() => setReferralModal(false)}
-          className="ml-2 bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2"
+          className="ml-2 bg-red-500 text-white font-semibold py-2 px-4 rounded hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2"
         >
           Cancel
         </button>
