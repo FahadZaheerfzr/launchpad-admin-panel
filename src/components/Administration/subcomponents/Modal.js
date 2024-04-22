@@ -1,6 +1,13 @@
 import React from "react";
 
-export default function Modal({tagList, selectedTags, toggleTag, confirmEditTags,setSelectedPool}) {
+export default function Modal({
+  tagList,
+  selectedTags,
+  toggleTag,
+  confirmEditTags,
+  setSelectedPool,
+  setTagModal,
+}) {
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
       <div className="bg-white dark:bg-dark-3 rounded-lg shadow-lg p-4">
@@ -31,7 +38,10 @@ export default function Modal({tagList, selectedTags, toggleTag, confirmEditTags
           </button>
           <button
             className="px-4 py-2 dark:bg-white text-white bg-black dark:text-black rounded-md hover:bg-blue-600"
-            onClick={() => setSelectedPool(null)}
+            onClick={() => {
+              setSelectedPool(null);
+              setTagModal(false);
+            }}
           >
             Cancel
           </button>
